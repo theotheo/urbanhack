@@ -78,6 +78,8 @@ def get_recommendations(uid, start, target):
     # 857 Dolgopa-City - МГУ
     res = user_search(start_city, uid)
     # normalize occupations and institution
+    if not res:
+        return pd.DataFrame()
     for item in res:
         if 'occupation' in item:
             item['occupation_type'] = item['occupation']['type']
