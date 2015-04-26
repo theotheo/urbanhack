@@ -116,4 +116,10 @@ function init () {
         myMap.destroy();
     };
 
+    $("#getRecommedations").click(function () {
+        var uid = $.data(document.body, "uid");
+        console.log(uid);
+        $.post("/", { "from": "Долгопрудный", "to": "Москва", "who": uid });
+    })
+
 }

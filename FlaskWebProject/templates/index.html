@@ -6,37 +6,38 @@
 
     <div id="login_button" onclick="VK.Auth.login(authInfo);"></div>
     <script type="text/javascript">
-      VK.init({
-        apiId: "4893367"
-      });
-      
-         VK.Auth.login(function(response) {
-        console.log(response)
-      if (response.session) {
-        /* Пользователь успешно авторизовался */
-        if (response.settings) {
-          /* Выбранные настройки доступа пользователя, если они были запрошены */
+        VK.init({
+            apiId: "4893367"
+        });
+
+        VK.Auth.login(function (response) {
+            console.log(response)
+            if (response.session) {
+                /* Пользователь успешно авторизовался */
+                if (response.settings) {
+                    /* Выбранные настройки доступа пользователя, если они были запрошены */
+                }
+            } else {
+                /* Пользователь нажал кнопку Отмена в окне авторизации */
+            }
+        })
+
+        function authInfo(response) {
+            if (response.session) {
+                alert('user: ' + response.session.mid);
+                $.data(document.body, "uid", response.session.mid);
+            } else {
+                alert('not auth');
+            }
         }
-      } else {
-        /* Пользователь нажал кнопку Отмена в окне авторизации */
-      }
-      })
-      
-      function authInfo(response) {
-      if (response.session) {
-        alert('user: '+response.session.mid);
-      } else {
-        alert('not auth');
-      }
-    }
-      VK.UI.button('login_button');
-      VK.Auth.getLoginStatus(authInfo);
+        VK.UI.button('login_button');
+        VK.Auth.getLoginStatus(authInfo);
 
     </script>
     
  <form>
   <input name="answer" id="location"></input>
-  <input type="button" value="Найти"></input>
+  <input type="button" value="Найти" id="getRecommendations"></input>
  </form>
 <div id="map"></div>
 <input type="button" id="destroyButton" value="Удалить карту"/>

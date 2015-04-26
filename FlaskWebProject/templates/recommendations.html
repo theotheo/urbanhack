@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+{% for user in users %}
+        <li><a href="https://vk.com/id{{ user.id }}">{{ user.name }}</a></li>
+{% endfor %}
+
+{% endblock %}

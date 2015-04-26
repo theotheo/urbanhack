@@ -5,16 +5,22 @@ Routes and views for the flask application.
 from datetime import datetime
 from flask import render_template
 from FlaskWebProject import app
+from flask import request
+from sergey import get_recommendation
 
-@app.route('/')
-@app.route('/home')
+
+@app.route('/', methods=['GET', 'POST'])
 def home():
     """Renders the home page."""
-    return render_template(
-        'index.html',
-        title='Home Page',
-        year=datetime.now().year,
-    )
+    if request.method == 'POST':
+        print request
+        get_recommendations()
+    else:
+        return render_template(
+            'index.html',
+            title='Home Page',
+            year=datetime.now().year,
+        )
 
 @app.route('/contact')
 def contact():
