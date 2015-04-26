@@ -24,26 +24,25 @@ def get_vkCity(city):
         return []
  
 def user_search(city, uid, with_friends=True):
-    url = u'https://api.vk.com/method/users.get?%s'
+    url = u'https://api.vk.com/method/friends.get?%s'
     url_friends = u'https://api.vk.com/method/friends.get?%s'
     params = urllib.urlencode({
-        'access_token': token,
         'city': city,
-        'from_list': 'friends',
         'count': 1000,
-        'user_ids': uid})
+        'fields' : 'city',
+        'user_id': uid})
     friends_params = {
-        'access_token': token,
         'count': 1000,
-        'fields': 'city,universities,occupation'}
+        'fields': 'city,universities,occupation,photo_100'}
  
     res = urllib2.urlopen(url % params).read()
     data = json.loads(res)
  
     if 'error' in data:
+        print data
         print "I hope this won't happen during the presentaion."
         return []
-    friends = data[u'response'][1:]
+    friends = filter(lambda x: x.get('city', -1) == city, data[u'response'][1:])
     friends2 = []
     for friend in friends:
          friends_params['user_id'] = friend[u'uid']
@@ -73,13 +72,11 @@ def get_groups(group_ids):
         return []
  
  
-def get_recommendations(uid):
-    start_city = get_vkCity(u'Долгопрудный')
-    target_city = get_vkCity(u'Москва')
-     
+def get_recommendations(uid, start, target):
+    start_city = get_vkCity(start)
+    target_city = get_vkCity(target)
     # 857 Dolgopa-City - МГУ
     res = user_search(start_city, uid)
-     
     # normalize occupations and institution
     for item in res:
         if 'occupation' in item:
@@ -87,14 +84,15 @@ def get_recommendations(uid):
             item['occupation_id'] = item['occupation'].get('id', pd.np.NAN)
         if 'universities' in item:
             pass # do something with universities
-     
+
     friends2df = pd.DataFrame(res)
     work_ids = friends2df[friends2df.occupation_id.notnull() &
                           (friends2df.occupation_type == 'work')].occupation_id
-     
+
     works = ','.join(map(str, work_ids.astype('int')))
-     
+
     worksdf = pd.DataFrame(get_groups(works))
-     
+
     grand = pd.merge(friends2df, worksdf[['gid', 'city']], how='left', left_on='occupation_id', right_on='gid', sort=False)
-     
+
+    return grand[grand.city_x == start_city & (grand.city_y == target_city)]
