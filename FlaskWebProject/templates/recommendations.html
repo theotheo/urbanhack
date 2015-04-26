@@ -1,9 +1,22 @@
 {% extends "layout.html" %}
 
 {% block content %}
+    <div class="navbar navbar-top">
+        <div class="container">
+	
+		<p class="navbar-text" style="display:visible !important">Самое время написать кому-нибудь
+		</p>
 
+
+        </div>
+    </div>
+
+<ul class="list-group">
+	<li class="list-group-item"><a href=""><img src="http://cs621230.vk.me/v621230581/1105a/VfhJOkd1iGU.jpg" alt="..." class="img-rounded"> Алла Аллавна</a></li>
+	
+	<li class="list-group-item"><a href=""><img src="http://cs624126.vk.me/v624126338/2d888/kuux0EmVLPE.jpg" alt="..." class="img-rounded"> Маргарита Коктейлевна</a></li>
 {% for profile in profiles %}
-        <li><a href="https://vk.com/id{{ profile['uid'] }}">{{ profile['last_name'] + ' ' + profile['first_name'] }}</a></li>
+        <li class="list-group-item"><a href="https://vk.com/id{{ profile['uid'] }}"><img src="{{profile['photo_100']}}" alt="..." class="img-rounded">{{ profile['last_name'] + ' ' + profile['first_name'] }}</a></li>
 {% endfor %}
-
+</ul>
 {% endblock %}

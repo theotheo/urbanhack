@@ -50,3 +50,13 @@ def about():
         year=datetime.now().year,
         message='Your application description page.'
     )
+
+@app.route('/find')
+def find():
+    """Renders the about page."""
+    return render_template(
+        'recommendations.html',
+        title='Find',
+        year=datetime.now().year,
+        message='Your application description page.'
+    )

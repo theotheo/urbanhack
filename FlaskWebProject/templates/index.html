@@ -2,16 +2,59 @@
 
 {% block content %}
 
+    <div class="navbar navbar-top">
+        <div class="container">
+	
+		<div id="login_place">
+		<p class="navbar-text navbar-right">Добро пожаловать! Для продолжения следует 
+		    <span id="login_button" onclick="VK.Auth.login(authInfo);"></span>
+		</p>
+		</div>
+
+		           	 <div class="navbar-header">
+            </div>
+ 
+        </div>
+    </div>
+
     <script src="https://vk.com/js/api/openapi.js" type="text/javascript"></script>
 
-    <div id="login_button" onclick="VK.Auth.login(authInfo);"></div>
+
     <script type="text/javascript">
         VK.init({
             apiId: "4893367"
         });
 
+			$("body").on("click", "#getRecommendations", function () {
+					var uid = $.data(document.body, "uid");
+					var from = $("#from").val();
+					if(!from) {
+						alert("Укажите, пожалуйста, откуда вы ездите в Москву, кликнув по карте");
+						return;
+					}
+					$.post("/", { "from": from, "to": "Москва", "uid": uid }, function(res) {console.log(res); $('body').html(res)});
+				})
+
+
         VK.Auth.login(function (response) {
+			$("#login_place").show()
             console.log(response)
+				str = "<p class=\"navbar-text\"> Здравствуйте, ";
+				str = str.concat(response.session.user.first_name).concat("! Вы ездите в Москву из <input name=\"answer\" id=\"from\" placeholder=\"...\"></input>");
+				str = str.concat("\n <input type=\"button\" value=\"Найти попутчиков!\" id=\"getRecommendations\"></input></p>")
+				
+				$("#login_place").html(str);
+				
+				$("#getRecommendations").click(function () {
+					var uid = $.data(document.body, "uid");
+					var from = $("#from").val();
+					if(!from) {
+						alert("Укажите, пожалуйста, откуда вы ездите в Москву, кликнув по карте");
+						return;
+					}
+					$.post("/", { "from": from, "to": "Москва", "uid": uid }, function(res) {console.log(res); $('body').html(res)});
+				})
+
             if (response.session) {
                 /* Пользователь успешно авторизовался */
                 if (response.settings) {
@@ -24,22 +67,19 @@
 
         function authInfo(response) {
             if (response.session) {
-                alert('user: ' + response.session.mid);
+                //alert('user: ' + response.session.mid);
+				console.log(response);
                 $.data(document.body, "uid", response.session.mid);
             } else {
-                alert('not auth');
+			    VK.UI.button('login_button');
             }
         }
-        VK.UI.button('login_button');
+ 
         VK.Auth.getLoginStatus(authInfo);
 
     </script>
     
- <form>
-  <input name="answer" id="location"></input>
-  <input type="button" value="Найти" id="getRecommendations"></input>
- </form>
 <div id="map"></div>
-<input type="button" id="destroyButton" value="Удалить карту"/>
+
 
 {% endblock %}

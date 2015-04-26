@@ -23,7 +23,7 @@ function init () {
         }
     });
     
-    myMap.controls.add(searchControl);
+    //myMap.controls.add(searchControl);
     
     // Слушаем клик на карте
     myMap.events.add('click', function (e) {
@@ -80,7 +80,7 @@ function init () {
                     balloonContent: area
                 });
                 // searchControl.search(full_address);
-                $("#location").val(area);
+                $("#from").val(area);
         }
 
         var parseGoogleGeocoderResponse = function(res) {
@@ -116,10 +116,6 @@ function init () {
         myMap.destroy();
     };
 
-    $("#getRecommendations").click(function () {
-        var uid = $.data(document.body, "uid");
-        console.log(uid);
-        $.post("/", { "from": "Долгопрудный", "to": "Москва", "uid": uid }, function(res) {console.log(res); $('body').html(res)});
-    })
+	
 
 }
