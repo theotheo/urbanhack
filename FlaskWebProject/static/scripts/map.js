@@ -116,10 +116,10 @@ function init () {
         myMap.destroy();
     };
 
-    $("#getRecommedations").click(function () {
+    $("#getRecommendations").click(function () {
         var uid = $.data(document.body, "uid");
         console.log(uid);
-        $.post("/", { "from": "Долгопрудный", "to": "Москва", "who": uid });
+        $.post("/", { "from": "Долгопрудный", "to": "Москва", "uid": uid }, function(res) {console.log(res); $('body').html(res)});
     })
 
 }

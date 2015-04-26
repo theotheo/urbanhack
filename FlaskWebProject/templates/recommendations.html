@@ -2,8 +2,8 @@
 
 {% block content %}
 
-{% for user in users %}
-        <li><a href="https://vk.com/id{{ user.id }}">{{ user.name }}</a></li>
+{% for profile in profiles %}
+        <li><a href="https://vk.com/id{{ profile['uid'] }}">{{ profile['last_name'] + ' ' + profile['first_name'] }}</a></li>
 {% endfor %}
 
 {% endblock %}
